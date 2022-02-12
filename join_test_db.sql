@@ -2,18 +2,18 @@ CREATE DATABASE IF NOT EXISTS join_test_db;
 USE join_test_db;
 
 CREATE TABLE roles (
-                       id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                       name VARCHAR(100) NOT NULL,
-                       PRIMARY KEY (id)
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+name VARCHAR(100) NOT NULL,
+PRIMARY KEY (id)
 );
 
 CREATE TABLE users (
-                       id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-                       name VARCHAR(100) NOT NULL,
-                       email VARCHAR(100) NOT NULL,
-                       role_id INT UNSIGNED DEFAULT NULL,
-                       PRIMARY KEY (id),
-                       FOREIGN KEY (role_id) REFERENCES roles (id)
+id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+name VARCHAR(100) NOT NULL,
+email VARCHAR(100) NOT NULL,
+role_id INT UNSIGNED DEFAULT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
 INSERT INTO roles (name) VALUES ('admin');
@@ -22,16 +22,16 @@ INSERT INTO roles (name) VALUES ('reviewer');
 INSERT INTO roles (name) VALUES ('commenter');
 
 INSERT INTO users (name, email, role_id) VALUES
-                                             ('bob', 'bob@example.com', 1),
-                                             ('joe', 'joe@example.com', 2),
-                                             ('sally', 'sally@example.com', 3),
-                                             ('adam', 'adam@example.com', 3),
-                                             ('jane', 'jane@example.com', null),
-                                             ('mike', 'mike@example.com', null),
-                                             ('claudia', 'claudia@example.com', 2),
-                                             ('aimee', 'aimee@example.com', 2),
-                                             ('arlene', 'arlene@example.com', 2),
-                                             ('lene', 'lene@example.com', null);
+('bob', 'bob@example.com', 1),
+('joe', 'joe@example.com', 2),
+('sally', 'sally@example.com', 3),
+('adam', 'adam@example.com', 3),
+('jane', 'jane@example.com', null),
+('mike', 'mike@example.com', null),
+('claudia', 'claudia@example.com', 2),
+('aimee', 'aimee@example.com', 2),
+('arlene', 'arlene@example.com', 2),
+('lene', 'lene@example.com', null);
 
 # Join/Inner Join
 SELECT users.name as user_name, roles.name as role_name
@@ -51,3 +51,9 @@ FROM users
 # Use COUNT and the appropriate join type to get a list of roles along with the number of users that have a given role. Hint: You will also need to use GROUP BY in the query.
 
 SELECT r.name, COUNT(*) FROM roles AS r RIGHT JOIN users as u on r.id = u.id GROUP BY r.name;
+
+# Other Solution Using Left Join
+SELECT roles.name AS 'Role', COUNT(u.role_id) AS 'Count'
+FROM roles
+         LEFT JOIN users u on roles.id = u.role_id
+GROUP BY roles.name;
